@@ -65,8 +65,8 @@ done
 
 # Detect Nvidia GPU
 echo "Detecting Nvidia GPU..."
-GPU_ID=$(lspci | grep -i nvidia | cut -d ' ' -f 1)
-AUDIO_ID=$(lspci | grep -i nvidia | grep -i audio | cut -d ' ' -f 1)
+GPU_ID=$(lspci | grep -i nvidia | cut -d ' ' -f 1 | sed 's/\./:/')
+AUDIO_ID=$(lspci | grep -i nvidia | grep -i audio | cut -d ' ' -f 1 | sed 's/\./:/')
 GPU_IDS="$GPU_ID $AUDIO_ID"
 
 # Disable nouveau driver
@@ -77,7 +77,8 @@ dracut /boot/initramfs-$(uname -r).img $(uname -r)
 
 # Enable IOMMU and VFIO for AMD
 echo "Enabling IOMMU and VFIO for AMD..."
-echo "iommu=pt iommu=1 vfio_iommu_type1.allow_unsafe_interrupts=1" >> /etc/default/grub
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash iommu=pt amd_iommu=on vfio_iommu_type1.allow_unsafe_interrupts=1"
+echo "GRUB_CMDLINE_LINUX_DEFAULT=\"$GRUB_CMDLINE_LINUX_DEFAULT\"" >> /etc/default/grub
 grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 echo "options vfio-pci ids=$GPU_IDS" >> /etc/modprobe.d/vfio.conf
 echo "vfio-pci" >> /etc/modules-load.d/vfio-pci.conf
