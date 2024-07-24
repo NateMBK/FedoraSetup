@@ -12,6 +12,7 @@ dnf update -y
 
 # List of packages
 packages=(
+  gnome-keyring
   ntfs-3g
   waybar
   kitty
