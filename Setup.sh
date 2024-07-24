@@ -1,6 +1,15 @@
 #!/bin/bash
 
+# Define log file
+LOGFILE="/var/log/fedora_setup.log"
+
+# Function to log messages
+log() {
+    echo "$(date): $1" | tee -a $LOGFILE
+}
+
 # Update system packages
+echo "Updating system packages..."
 dnf update -y
 
 # List of packages
@@ -53,23 +62,37 @@ packages=(
 
 # Install packages
 for package in "${packages[@]}"; do
-  dnf install -y "$package"
+  log "Installing $package..."
+  dnf install -y "$package" | tee -a $LOGFILE
 done
 
 # Detect Nvidia GPU
+log "Detecting Nvidia GPU..."
 GPU_ID=$(lspci | grep -i nvidia | cut -d ' ' -f 1)
 AUDIO_ID=$(lspci | grep -i nvidia | grep -i audio | cut -d ' ' -f 1)
 GPU_IDS="$GPU_ID $AUDIO_ID"
 
 # Disable nouveau driver
+log "Disabling nouveau driver..."
 echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
 mv /boot/initramfs-$(uname -r).img /boot/initramfs-$(uname -r)-nouveau.img
 dracut /boot/initramfs-$(uname -r).img $(uname -r)
 
 # Enable IOMMU and VFIO for AMD
+log "Enabling IOMMU and VFIO for AMD..."
 echo "iommu=pt iommu=1 vfio_iommu_type1.allow_unsafe_interrupts=1" >> /etc/default/grub
 grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg
 echo "options vfio-pci ids=$GPU_IDS" >> /etc/modprobe.d/vfio.conf
 echo "vfio-pci" >> /etc/modules-load.d/vfio-pci.conf
 
-echo "All packages installed successfully!"
+# Create .config directory in all users' home directories
+log "Creating .config directory in all users' home directories..."
+for dir in /home/*; do
+  if [ -d "$dir" ]; then
+    mkdir -p "$dir/.config"
+    chown $(basename "$dir"):$(basename "$dir") "$dir/.config"
+    log ".config directory created for user $(basename "$dir")"
+  fi
+done
+
+log "All packages installed successfully!"
