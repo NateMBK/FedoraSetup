@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define log file
-LOGFILE="/var/log/fedora_setup.log"
+LOGFILE="$(dirname "$0")/install_log.txt"
 
 # Function to log messages
 log() {
@@ -96,3 +96,4 @@ for dir in /home/*; do
 done
 
 log "All packages installed successfully!"
+
