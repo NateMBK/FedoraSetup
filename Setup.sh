@@ -65,39 +65,44 @@ create_config_directories() {
 }
 
 # Menu to select which parts of the script to run
-echo "Which parts of the script would you like to run?"
-echo "1. Update and install packages"
-echo "2. Configure PCI passthrough"
-echo "3. Create .config directories"
-echo "Enter 'debug' for debug mode"
-echo "Enter 'all' to run all tasks"
-read -p "Enter your choice (number, 'debug', or 'all'): " choice
+while true; do
+  echo "Which parts of the script would you like to run?"
+  echo "1. Update and install packages"
+  echo "2. Configure PCI passthrough"
+  echo "3. Create .config directories"
+  echo "Enter 'debug' for debug mode"
+  echo "Enter 'all' to run all tasks"
+  echo "Enter 'q' to quit"
+  read -p "Enter your choice (number, 'debug', 'all', or 'q'): " choice
 
-case "$choice" in
-  "1")
-    update_packages
-    install_packages
-    ;;
-  "2")
-    configure_pci_passthrough
-    ;;
-  "3")
-    create_config_directories
-    ;;
-  "debug")
-    # Redirect all output to log file
-    exec > >(tee -a "$LOGFILE") 2>&1
-    ;;
-  "all")
-    update_packages
-    install_packages
-    configure_pci_passthrough
-    create_config_directories
-    ;;
-  *)
-    echo "Invalid choice. Please run the script again."
-    exit
-    ;;
-esac
+  case "$choice" in
+    "1")
+      update_packages
+      install_packages
+      ;;
+    "2")
+      configure_pci_passthrough
+      ;;
+    "3")
+      create_config_directories
+      ;;
+    "debug")
+      # Redirect all output to log file
+      exec > >(tee -a "$LOGFILE") 2>&1
+      ;;
+    "all")
+      update_packages
+      install_packages
+      configure_pci_passthrough
+      create_config_directories
+      ;;
+    "q")
+      break
+      ;;
+    *)
+      echo "Invalid choice. Please enter a valid option."
+      ;;
+  esac
+done
 
 echo "The install for the selected options was completed!"
