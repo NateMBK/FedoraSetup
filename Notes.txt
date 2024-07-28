@@ -1,3 +1,4 @@
 add to setup
 nano
 kvantum
+clipman > https://wiki.hyprland.org/Useful-Utilities/Clipboard-Managers/
