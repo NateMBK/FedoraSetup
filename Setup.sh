@@ -24,6 +24,14 @@ install_packages() {
   for package in "${packages[@]}"; do
     dnf install -y "$package"
   done
+
+  # Download and install JetBrainsMono font
+  echo "Installing JetBrainsMono font..."
+  wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip \
+  && cd ~/.local/share/fonts \
+  && unzip JetBrainsMono.zip \
+  && rm JetBrainsMono.zip \
+  && fc-cache -fv
 }
 
 # Function to create .config directory and copy files
