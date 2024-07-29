@@ -26,14 +26,17 @@ install_packages() {
   done
 }
 
-# Function to create .config directory in all users' home directories
-create_config_directories() {
-  echo "Creating .config directory in all users' home directories..."
+# Function to create .config directory and copy files
+setup_user_configs() {
+  echo "Setting up user .configs..."
   for dir in /home/*; do
     if [ -d "$dir" ]; then
       mkdir -p "$dir/.config"
       chown $(basename "$dir"):$(basename "$dir") "$dir/.config"
-      echo ".config directory created for user $(basename "$dir")"
+      cp files/Wallpaper.jpg "$dir/.config/"
+      cp -r files/dotconfigs/* "$dir/.config/"
+      chown -R $(basename "$dir"):$(basename "$dir") "$dir/.config/"
+      echo ".config directory and files set up for user $(basename "$dir")"
     fi
   done
 }
@@ -42,7 +45,7 @@ create_config_directories() {
 while true; do
   echo "Which parts of the script would you like to run?"
   echo "1. Update and install packages"
-  echo "2. Create .config directories"
+  echo "2. Set up user .configs"
   echo "Enter 'all' to run all tasks"
   echo "Enter 'q' to quit"
   read -p "Enter your choice (number, 'all', or 'q'): " choice
@@ -53,12 +56,12 @@ while true; do
       install_packages
       ;;
     "2")
-      create_config_directories
+      setup_user_configs
       ;;
     "all")
       update_packages
       install_packages
-      create_config_directories
+      setup_user_configs
       ;;
     "q")
       break
