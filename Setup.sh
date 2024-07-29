@@ -20,10 +20,23 @@ install_packages() {
     packages+=("$line")
   done < files/packages.txt
 
-  # Install packages
+  # Install packages and log missing ones
+  echo "Installing packages..."
+  missing_packages=()
   for package in "${packages[@]}"; do
-    dnf install -y "$package"
+    if ! dnf install -y "$package"; then
+      missing_packages+=("$package")
+    fi
   done
+
+  # Log missing packages
+  if [ ${#missing_packages[@]} -ne 0 ]; then
+    echo "The following packages were not found in the dnf repository:" > missing_packages.log
+    for package in "${missing_packages[@]}"; do
+      echo "$package" >> missing_packages.log
+    done
+    echo "Missing packages have been logged to missing_packages.log"
+  fi
 
   # Download and install JetBrainsMono font
   echo "Installing JetBrainsMono font..."
