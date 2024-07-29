@@ -1,6 +1,0 @@
-add to setup
-nano
-curl
-wget
-kvantum
-clipman > https://wiki.hyprland.org/Useful-Utilities/Clipboard-Managers/

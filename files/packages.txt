@@ -1,44 +1,51 @@
-gnome-keyring
-ntfs-3g
-waybar
-kitty
-firefox
-rofi-wayland
-dxvk-native
-mangohud
-zoom
-discord
-bottles
-papirus-icon-theme
-polkit-gnome
-swaybg
-htop
-ffmpeg
-viewnior
-pavucontrol
-nautilus
-materia-gtk-theme
-oxygen-icon-theme
-okular
-ark
-partitionmanager
-git
-code
-transmission
-gamemode
-dmidecode
-libreoffice
-vkd3d
-vkd3d-proton
-wine
-celluloid
-xdg-desktop-portal-wlr
-virt-manager
-virt-viewer
-spice-gtk3
-spice-protocol
-virtio-win
-spice-vdagent
-adwaita-icon-theme
-hyprland
-hyprland-devel
+  wget
+  curl
+  nano
+  kvantum
+  fontawesome-fonts-all
+  gnome-keyring
+  ntfs-3g
+  waybar
+  kitty
+  firefox
+  rofi-wayland
+  dxvk-native
+  mangohud
+  zoom
+  discord
+  bottles
+  papirus-icon-theme
+  polkit-gnome
+  gnome-tweaks
+  swaybg
+  htop
+  ffmpeg
+  viewnior
+  pavucontrol
+  nautilus
+  materia-gtk-theme
+  wl-clipboard
+  oxygen-icon-theme
+  okular
+  ark
+  partitionmanager
+  git
+  code
+  transmission
+  gamemode
+  dmidecode
+  libreoffice
+  vkd3d
+  vkd3d-proton
+  wine
+  celluloid
+  xdg-desktop-portal-wlr
+  virt-manager
+  virt-viewer
+  spice-gtk3
+  spice-protocol
+  virtio-win
+  spice-vdagent
+  adwaita-icon-theme
+  hyprland
+  hyprland-devel

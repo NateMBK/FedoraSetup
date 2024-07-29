@@ -6,9 +6,6 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-# Define log file
-LOGFILE="$(dirname "$0")/install_log.txt"
-
 # Function to update system packages
 update_packages() {
   echo "Updating system packages..."
@@ -26,6 +23,11 @@ install_packages() {
   # Install packages
   for package in "${packages[@]}"; do
     dnf install -y "$package"
+    wget -P ~/.local/share/fonts https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip \
+    && cd ~/.local/share/fonts \
+    && unzip JetBrainsMono.zip \
+    && rm JetBrainsMono.zip \
+    && fc-cache -fv
   done
 }
 
@@ -70,10 +72,9 @@ while true; do
   echo "1. Update and install packages"
   echo "2. Configure PCI passthrough"
   echo "3. Create .config directories"
-  echo "Enter 'debug' for debug mode"
   echo "Enter 'all' to run all tasks"
   echo "Enter 'q' to quit"
-  read -p "Enter your choice (number, 'debug', 'all', or 'q'): " choice
+  read -p "Enter your choice (number, 'all', or 'q'): " choice
 
   case "$choice" in
     "1")
@@ -85,10 +86,6 @@ while true; do
       ;;
     "3")
       create_config_directories
-      ;;
-    "debug")
-      # Redirect all output to log file
-      exec > >(tee -a "$LOGFILE") 2>&1
       ;;
     "all")
       update_packages
