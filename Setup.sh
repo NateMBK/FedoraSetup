@@ -54,10 +54,11 @@ setup_user_configs() {
     if [ -d "$dir" ]; then
       mkdir -p "$dir/.config"
       chown $(basename "$dir"):$(basename "$dir") "$dir/.config"
+      echo ".config directory created for user $(basename "$dir")"
       cp files/Wallpaper.jpg "$dir/.config/"
       cp -r files/dotconfigs/* "$dir/.config/"
       chown -R $(basename "$dir"):$(basename "$dir") "$dir/.config/"
-      echo ".config directory and files set up for user $(basename "$dir")"
+      echo "Files copied to .config directory for user $(basename "$dir")"
     fi
   done
 }
