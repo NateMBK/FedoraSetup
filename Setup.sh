@@ -12,6 +12,29 @@ update_packages() {
   dnf update -y
 }
 
+# Function to install repositories
+install_repositories() {
+  echo "Installing repositories..."
+  
+  # Read list of repositories from file
+  repos=()
+  while IFS= read -r line; do
+    repos+=("$line")
+  done < "$(dirname "$0")/files/rpms.txt"
+
+  # Install repositories
+  for repo in "${repos[@]}"; do
+    if ! sudo dnf install -y "$repo"; then
+      echo "Failed to install repository: $repo"
+    fi
+  done
+
+  # Enable the repositories
+  echo "Enabling repositories..."
+  sudo dnf config-manager --set-enabled rpmfusion-free rpmfusion-nonfree
+  sudo dnf config-manager --set-enabled packages-microsoft-com-prod
+}
+
 # Function to install packages
 install_packages() {
   # Read list of packages from file
@@ -66,21 +89,26 @@ setup_user_configs() {
 # Menu to select which parts of the script to run
 while true; do
   echo "Which parts of the script would you like to run?"
-  echo "1. Update and install packages"
-  echo "2. Set up user .configs"
+  echo "1. Install repositories and update system"
+  echo "2. Install packages"
+  echo "3. Set up user .configs"
   echo "Enter 'all' to run all tasks"
   echo "Enter 'q' to quit"
   read -p "Enter your choice (number, 'all', or 'q'): " choice
 
   case "$choice" in
     "1")
+      install_repositories
       update_packages
-      install_packages
       ;;
     "2")
+      install_packages
+      ;;
+    "3")
       setup_user_configs
       ;;
     "all")
+      install_repositories
       update_packages
       install_packages
       setup_user_configs
