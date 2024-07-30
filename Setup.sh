@@ -18,7 +18,7 @@ install_packages() {
   packages=()
   while IFS= read -r line; do
     packages+=("$line")
-  done < files/packages.txt
+  done < "$(dirname "$0")/files/packages.txt"
 
   # Install packages and log missing ones
   echo "Installing packages..."
@@ -55,8 +55,8 @@ setup_user_configs() {
       mkdir -p "$dir/.config"
       chown $(basename "$dir"):$(basename "$dir") "$dir/.config"
       echo ".config directory created for user $(basename "$dir")"
-      cp files/Wallpaper.jpg "$dir/.config/"
-      cp -r files/dotconfigs/* "$dir/.config/"
+      cp "$(dirname "$0")/files/Wallpaper.jpg" "$dir/.config/"
+      cp -r "$(dirname "$0")/files/dotconfigs/"* "$dir/.config/"
       chown -R $(basename "$dir"):$(basename "$dir") "$dir/.config/"
       echo "Files copied to .config directory for user $(basename "$dir")"
     fi
