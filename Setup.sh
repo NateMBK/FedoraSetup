@@ -6,21 +6,16 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-# Function to update system packages
-update_packages() {
-  echo "Updating system packages..."
-  dnf update -y
-}
-
 # Function to install repositories
 install_repositories() {
   echo "Installing repositories..."
   
-  # Read list of repositories from file
-  repos=()
-  while IFS= read -r line; do
-    repos+=("$line")
-  done < "$(dirname "$0")/files/rpms.txt"
+  # List of repositories
+  repos=(
+    "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
+    "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+    "https://packages.microsoft.com/yumrepos/vscode"
+  )
 
   # Install repositories
   for repo in "${repos[@]}"; do
@@ -33,6 +28,12 @@ install_repositories() {
   echo "Enabling repositories..."
   sudo dnf config-manager --set-enabled rpmfusion-free rpmfusion-nonfree
   sudo dnf config-manager --set-enabled packages-microsoft-com-prod
+}
+
+# Function to update system packages
+update_packages() {
+  echo "Updating system packages..."
+  dnf update -y
 }
 
 # Function to install packages
