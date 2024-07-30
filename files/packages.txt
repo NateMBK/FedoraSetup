@@ -42,7 +42,6 @@ virt-manager
 virt-viewer
 spice-gtk3
 spice-protocol
-virtio-win
 spice-vdagent
 adwaita-icon-theme
 hyprland
