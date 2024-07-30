@@ -28,7 +28,7 @@ wl-clipboard
 oxygen-icon-theme
 okular
 ark
-partitionmanager
+kde-partitionmanager
 git
 code
 transmission
