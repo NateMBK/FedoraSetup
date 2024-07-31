@@ -4,7 +4,7 @@ if [ "$EUID" -ne 0 ]; then
   echo "Switching to root..."
   exec sudo $0 "$@"
 fi
-apt-get install -y git dkms
+dnf install -y git dkms
 git clone -b $BRANCH --depth=1 https://github.com/microsoft/WSL2-Linux-Kernel
 cd WSL2-Linux-Kernel
 VERSION=$(git rev-parse --short HEAD)
@@ -22,3 +22,6 @@ BUILT_MODULE_NAME="dxgkrnl"
 DEST_MODULE_LOCATION="/kernel/drivers/hv/dxgkrnl/"
 AUTOINSTALL="yes"
 EOF
+dkms add -m dxgkrnl -v $VERSION
+dkms build -m dxgkrnl -v $VERSION
+dkms install -m dxgkrnl -v $VERSION
