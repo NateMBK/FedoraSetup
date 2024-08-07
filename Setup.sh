@@ -6,6 +6,9 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+# Define the absolute path to the FedoraSetup directory
+FEDORA_SETUP_DIR="/home/$(logname)/FedoraSetup"
+
 # Function to install repositories
 install_repositories() {
   echo "Installing repositories..."
@@ -45,7 +48,7 @@ install_packages() {
   packages=()
   while IFS= read -r line; do
     packages+=("$line")
-  done < "$HOME/FedoraSetup/files/packages.txt"
+  done < "$FEDORA_SETUP_DIR/files/packages.txt"
 
   # Install packages and log missing ones
   echo "Installing packages..."
@@ -85,15 +88,15 @@ setup_user_configs() {
       mkdir -p "$dir/.config"
       chown $(basename "$dir"):$(basename "$dir") "$dir/.config"
       echo ".config directory created for user $(basename "$dir")"
-      if [ -f "$HOME/FedoraSetup/files/Wallpaper.jpg" ]; then
-        cp "$HOME/FedoraSetup/files/Wallpaper.jpg" "$dir/.config/"
+      if [ -f "$FEDORA_SETUP_DIR/files/Wallpaper.jpg" ]; then
+        cp "$FEDORA_SETUP_DIR/files/Wallpaper.jpg" "$dir/.config/"
       else
-        echo "Wallpaper.jpg not found in $HOME/FedoraSetup/files/"
+        echo "Wallpaper.jpg not found in $FEDORA_SETUP_DIR/files/"
       fi
-      if [ -d "$HOME/FedoraSetup/files/dotconfigs" ]; then
-        cp -r "$HOME/FedoraSetup/files/dotconfigs/"* "$dir/.config/"
+      if [ -d "$FEDORA_SETUP_DIR/files/dotconfigs" ]; then
+        cp -r "$FEDORA_SETUP_DIR/files/dotconfigs/"* "$dir/.config/"
       else
-        echo "dotconfigs directory not found in $HOME/FedoraSetup/files/"
+        echo "dotconfigs directory not found in $FEDORA_SETUP_DIR/files/"
       fi
       chown -R $(basename "$dir"):$(basename "$dir") "$dir/.config/"
       echo "Files copied to .config directory for user $(basename "$dir")"
