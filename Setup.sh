@@ -72,6 +72,9 @@ install_packages() {
   && unzip JetBrainsMono.zip \
   && rm JetBrainsMono.zip \
   && fc-cache -fv
+  if [ $? -ne 0 ]; then
+    echo "Failed to install JetBrainsMono font"
+  fi
 }
 
 # Function to create .config directory and copy files
