@@ -45,7 +45,7 @@ install_packages() {
   packages=()
   while IFS= read -r line; do
     packages+=("$line")
-  done < "$(dirname "$0")/files/packages.txt"
+  done < "$HOME/FedoraSetup/files/packages.txt"
 
   # Install packages and log missing ones
   echo "Installing packages..."
@@ -85,8 +85,16 @@ setup_user_configs() {
       mkdir -p "$dir/.config"
       chown $(basename "$dir"):$(basename "$dir") "$dir/.config"
       echo ".config directory created for user $(basename "$dir")"
-      cp "$(dirname "$0")/files/Wallpaper.jpg" "$dir/.config/"
-      cp -r "$(dirname "$0")/files/dotconfigs/"* "$dir/.config/"
+      if [ -f "$HOME/FedoraSetup/files/Wallpaper.jpg" ]; then
+        cp "$HOME/FedoraSetup/files/Wallpaper.jpg" "$dir/.config/"
+      else
+        echo "Wallpaper.jpg not found in $HOME/FedoraSetup/files/"
+      fi
+      if [ -d "$HOME/FedoraSetup/files/dotconfigs" ]; then
+        cp -r "$HOME/FedoraSetup/files/dotconfigs/"* "$dir/.config/"
+      else
+        echo "dotconfigs directory not found in $HOME/FedoraSetup/files/"
+      fi
       chown -R $(basename "$dir"):$(basename "$dir") "$dir/.config/"
       echo "Files copied to .config directory for user $(basename "$dir")"
     fi
